@@ -60,6 +60,14 @@ public class TetrisSufaceView extends  SurfaceView implements Callback,Runnable{
 	private static final int DIALOG_GAME =1,DIALOG_BACK =2;
 	private boolean long_press = false;
 	
+	
+	/**
+	 * 
+	 * 测试github修改
+	 */
+	private int testCount=1;
+	
+	
 	private Thread surfaceViewDrawThread;
 	private SurfaceHolder surfaceHolder;
 	private Canvas canvas;
