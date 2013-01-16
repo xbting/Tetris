@@ -15,7 +15,7 @@ package com.example.testels;
  */
 public class Shape {
 	public final static int LEFT=1,RIGHT=2,DOWN=3,STATECHANGE=1,MOVE =2;
-	public final int[][] map=null;
+	public static int[][] map=null;
 	
 	public static int[][][]shape=new int[][][]{
 		/**
@@ -187,7 +187,7 @@ public class Shape {
 	 */
 	public static boolean isBound(int type, int state, int cellLeft,
 			int cellTop, int cellSize, int direction, int boundLeft,
-			int bountRight, int boundTop, int boundBottom, int action) {
+			int boundRight, int boundTop, int boundBottom, int action) {
 		
 		if(action==STATECHANGE){
 			state = stateChange(type, state);
