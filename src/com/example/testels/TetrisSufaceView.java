@@ -19,6 +19,7 @@ import android.media.SoundPool;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
@@ -49,7 +50,7 @@ public class TetrisSufaceView extends  SurfaceView implements Callback,Runnable,
 	
 	private int valueKeyDown =0;//按下的键值
 	private static final int VALUE_LEFT_KEY=1,VALUE_RIGHT_KEY=2,VALUE_UP_KEY=3,VALUE_DOWN_KEY=4;
-	private static final int DIALOG_GAME =1,DIALOG_BACK =2;
+	public static final int DIALOG_GAMEOVER =1,DIALOG_BACK =2;
 	private boolean long_press = false;
 	
 	private boolean flag = true; //线程run方法循环标志位
@@ -125,6 +126,7 @@ public class TetrisSufaceView extends  SurfaceView implements Callback,Runnable,
 		int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
 		volume = nowVolume/maxVolume*10;
 		Log.i("TAG", "nowVolume:"+nowVolume+"    maxVolume:"+maxVolume+"    volume:"+volume);
+		volume=0;
 		soundPoolMap = new HashMap<String, Integer>();
 		soundPoolMap.put("move", soundPool.load(context, R.raw.move, 0));
 		soundPoolMap.put("getScore", soundPool.load(context, R.raw.getscore, 0));
@@ -294,6 +296,7 @@ public class TetrisSufaceView extends  SurfaceView implements Callback,Runnable,
 			}
 			
 			if(isOver){
+				((MainActivity)context).mHandler.sendEmptyMessage(DIALOG_GAMEOVER);
 				gameOver();
 			}
 			doDraw();
@@ -661,6 +664,36 @@ public class TetrisSufaceView extends  SurfaceView implements Callback,Runnable,
 	public boolean onTouch(View v, MotionEvent event) {
 		// TODO Auto-generated method stub
 		return mGestureDetector.onTouchEvent(event);
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		// TODO Auto-generated method stub
+		if(!isPause){
+			if(keyCode==event.KEYCODE_DPAD_LEFT){
+				valueKeyDown = VALUE_LEFT_KEY ;
+			}else if(keyCode==event.KEYCODE_DPAD_RIGHT){
+				valueKeyDown = VALUE_RIGHT_KEY ;
+			}else if(keyCode==event.KEYCODE_DPAD_DOWN){
+				valueKeyDown = VALUE_DOWN_KEY ;
+			}else if(keyCode==event.KEYCODE_DPAD_UP){
+				valueKeyDown = VALUE_UP_KEY ;
+			}
+		}
+		if(keyCode==KeyEvent.KEYCODE_DPAD_CENTER){
+			soundPool.play(soundPoolMap.get("move"), volume, volume, 0, 0, 1f);
+			if(tetrisMoveRunnable.isFlag()){
+				isPause = true;
+				tetrisMoveRunnable.setFlag(false);//停止下落线程中的下落动作。但不停止改线程。
+			}else if(!tetrisMoveRunnable.isFlag()){
+				isPause=false;
+				tetrisMoveRunnable.setFlag(true);
+			}
+		}
+		if(keyCode==KeyEvent.KEYCODE_BACK){
+			((MainActivity)context).mHandler.sendEmptyMessage(DIALOG_BACK);
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 	
 	

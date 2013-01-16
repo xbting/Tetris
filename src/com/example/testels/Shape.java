@@ -196,15 +196,55 @@ public class Shape {
 				for (int k = 0; k < 4;k++) {
 					if(shape[type][j][k]==1){
 						int cell_top = cellTop+(j-state)*cellSize;
-						int cell_left = cellLeft+(k-2)*cellSize;
+						int cell_left = cellLeft+k*cellSize;
 						
 						int mapX= (cell_left-boundLeft)/cellSize;
 						int mapY =(cell_top-boundTop)/cellSize;
+						if(mapX<0 || mapX>TetrisSufaceView.cols-1){ //左边或右边出界了
+							return false;
+						}
+						if(mapY>TetrisSufaceView.rows-1){  //底部出界了
+							return false;
+						}
+						if(Shape.map[mapY][mapX]==1){  //变形后的位置已经有方块了
+							return false;
+						}
 					}
 				}
 			}
 		}else if(action==MOVE){
-			
+			for (int i = state; i < state+4; i++) {
+				for (int j = 0; j < 4; j++) {
+					if(Shape.shape[type][i][j]==1){
+						int cell_top = cellTop+(i-state)*cellSize;
+						int cell_left =cellLeft+j*cellSize;
+						
+						int mapX =(cell_left-boundLeft)/cellSize;
+						int mapY = (cell_top-boundTop)/cellSize;
+						
+						switch (direction) {
+						case LEFT:
+							if( mapX==0 ||Shape.map[mapY][mapX-1]==1){
+								return false;
+							}
+							break;
+						case RIGHT:
+							if(mapX==TetrisSufaceView.cols-1 || Shape.map[mapX][mapX+1]==1){
+								return false;
+							}
+							break;
+						case DOWN:
+							if(mapY==TetrisSufaceView.rows-1 || Shape.map[mapX+1][mapX]==1){
+								return false;
+							}
+							break;
+						default:
+							break;
+						}
+					}
+				}
+				
+			}
 		}
 		
 		return true;
