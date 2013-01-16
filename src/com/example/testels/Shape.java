@@ -1,6 +1,8 @@
 
 package com.example.testels;
 
+import android.util.Log;
+
 /**
  * 项目名称：TestELS
  * 类名称：Shape
@@ -78,7 +80,7 @@ public class Shape {
 			 * #
 			 * #
 			 */
-			{1,1,0,0},{1,0,0,0},{1,0,0,0},{1,0,0,0},
+			{1,1,0,0},{1,0,0,0},{1,0,0,0},{0,0,0,0},
 			/**
 			 * ###
 			 * 	 #	
@@ -215,6 +217,7 @@ public class Shape {
 		}else if(action==MOVE){
 			for (int i = state; i < state+4; i++) {
 				for (int j = 0; j < 4; j++) {
+					Log.e("TAG", "isBound-move   type:"+type+"    i:"+i+"      j:"+j);
 					if(Shape.shape[type][i][j]==1){
 						int cell_top = cellTop+(i-state)*cellSize;
 						int cell_left =cellLeft+j*cellSize;

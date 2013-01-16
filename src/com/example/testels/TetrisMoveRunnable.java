@@ -73,7 +73,7 @@ public class TetrisMoveRunnable implements Runnable{
 						Set<Integer> setX = insertOneShape(type, state, cellTop, cellLeft, cellSize, boundLeft, boundTop);
 						int scorePlus = deleteAndScore(setX, soundPool, soundPoolMap);
 						int nextType = new Random().nextInt(7);
-						int nextState = new Random().nextInt(Shape.shape[type].length)*4;
+						int nextState = new Random().nextInt(Shape.shape[nextType].length/4)*4;
 						
 						mTetrisSufaceView.setType(mTetrisSufaceView.getNextType());
 						mTetrisSufaceView.setState(mTetrisSufaceView.getState());

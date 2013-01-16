@@ -87,10 +87,11 @@ public class TetrisSufaceView extends  SurfaceView implements Callback,Runnable,
 		score = 0;
 		initSound();
 		type = new Random().nextInt(7);
-		int length = Shape.shape[type].length;
+		int length = Shape.shape[type].length/4;
 		state =new Random().nextInt(length)*4;
+		Log.i("TAG", "init    type:"+type+"    state:"+state);
 		nextType = new Random().nextInt(7);
-		nextState = new Random().nextInt(Shape.shape[nextType].length)*4;
+		nextState = new Random().nextInt(Shape.shape[nextType].length/4)*4;
 		
 		green_brick_bmp = BitmapFactory.decodeResource(getResources(), R.drawable.green_brick);
 		red_brick_bmp = BitmapFactory.decodeResource(getResources(), R.drawable.red_brick);
@@ -140,12 +141,12 @@ public class TetrisSufaceView extends  SurfaceView implements Callback,Runnable,
 		Rect rightRect = new Rect(boundRight, boundTop, boundRight+2, boundBottom);
 		Rect topRect = new Rect(0, boundTop-1, boundRight+2, boundTop);
 		Rect bottomRect = new Rect(0, boundBottom, boundRight+2, boundBottom+2);
-		canvas.drawRect(leftRect, paint1);
-		canvas.drawRect(rightRect, paint1);
-		canvas.drawRect(topRect, paint1);
-		canvas.drawRect(bottomRect, paint1);
+		canvas.drawRect(leftRect, paint);
+		canvas.drawRect(rightRect, paint);
+		canvas.drawRect(topRect, paint);
+		canvas.drawRect(bottomRect, paint);
 		drawMap();
-		
+		Log.e("TAG", "TetrisSurfaceView.doDraw  type:"+type+"   state:"+state);
 		getOneBrickShape(type, state);
 		
 		canvas.drawText("得分："+score, boundRight+10, boundTop+cellSize*2, paint);
@@ -167,6 +168,7 @@ public class TetrisSufaceView extends  SurfaceView implements Callback,Runnable,
 	private void drawNextShape(int type,int state){
 		for (int i = state; i <state + 4; i++) {
 			for (int j = 0; j < 4; j++) {
+				Log.i("TAG", "drawNextShape---type:"+type+"    state:"+state+"   i:"+i+"    j:"+j);
 				if(Shape.shape[type][i][j]==1){
 					int cellSmallSize = (int) (cellSize*0.6);
 					int cell_top = boundTop+cellSize*5+cellSmallSize*(i-state);
@@ -216,6 +218,7 @@ public class TetrisSufaceView extends  SurfaceView implements Callback,Runnable,
 	private void getOneBrickShape(int type,int state){
 		for (int i = state; i < state+4; i++) {
 			for (int j = 0; j < 4; j++) {
+				Log.i("TAG", "getOneBrickShape--type:"+type+"   state:"+state+"    i:"+i+"   j:"+j);
 				if(Shape.shape[type][i][j]==1){
 					int cell_top =cellTop+(i-state)*cellSize; //得到小方块的纵坐标
 					int cell_left = cellLeft+j*cellSize; //得到小方块的横坐标
@@ -302,8 +305,9 @@ public class TetrisSufaceView extends  SurfaceView implements Callback,Runnable,
 			doDraw();
 			long endTime = System.currentTimeMillis();
 			duration = endTime -startTime;
+			Log.w("TAG", "duraton:"+duration);
 			try {
-				Thread.sleep(sleep-duration);
+				Thread.sleep(50);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -640,6 +644,7 @@ public class TetrisSufaceView extends  SurfaceView implements Callback,Runnable,
 				}
 			}else if(y<0){ //游戏暂停或继续
 				soundPool.play(soundPoolMap.get("move"), volume, volume, 0, 0, 1f);
+				Log.i("TAG", "tetrisMoveRunnable is null ?"+(tetrisMoveRunnable==null));
 				if(tetrisMoveRunnable.isFlag()){
 					isPause = true;
 					tetrisMoveRunnable.setFlag(false);//停止下落线程中的下落动作。但不停止改线程。
