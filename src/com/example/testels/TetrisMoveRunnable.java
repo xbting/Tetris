@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import android.media.SoundPool;
+import android.util.Log;
 
 /**
  * 项目名称：TestELS
@@ -25,7 +26,7 @@ public class TetrisMoveRunnable implements Runnable{
 	private TetrisSufaceView mTetrisSufaceView;
 	private boolean flag = true;
 	private boolean flagRun = true;
-	private int sleep = 1000;
+	private int sleep = 500;
 //	private int[][][] shape = Shape.shape;
 	
 	
@@ -69,23 +70,26 @@ public class TetrisMoveRunnable implements Runnable{
 						cellTop = Shape.moveDown(cellTop, cellSize);
 						mTetrisSufaceView.setCellTop(cellTop);
 					}else{//不能下降了
+						Log.i("TAG", "TetrisMoveRunnable-----不能下降了");
+						
 						soundPool.play(soundPoolMap.get("down"), valume, valume, 0, 0, 1f);
 						Set<Integer> setX = insertOneShape(type, state, cellTop, cellLeft, cellSize, boundLeft, boundTop);
+						int score = mTetrisSufaceView.getScore();
 						int scorePlus = deleteAndScore(setX, soundPool, soundPoolMap);
 						int nextType = new Random().nextInt(7);
 						int nextState = new Random().nextInt(Shape.shape[nextType].length/4)*4;
 						
 						mTetrisSufaceView.setType(mTetrisSufaceView.getNextType());
-						mTetrisSufaceView.setState(mTetrisSufaceView.getState());
+						mTetrisSufaceView.setState(mTetrisSufaceView.getNextState());
 						
 						mTetrisSufaceView.setNextType(nextType);
 						mTetrisSufaceView.setNextState(nextState);
-						
-						mTetrisSufaceView.setScore(scorePlus);
+						Log.i("TAG", "newShape   type:"+mTetrisSufaceView.getType()+"   state:"+mTetrisSufaceView.getState()+"   nextType:"+mTetrisSufaceView.getNextType()+"    nextState:"+mTetrisSufaceView.getNextState());
+						mTetrisSufaceView.setScore(scorePlus+score);
 						mTetrisSufaceView.setCellTop(mTetrisSufaceView.getBoundTop());
 						mTetrisSufaceView.setCellLeft((mTetrisSufaceView.getBoundRight()-mTetrisSufaceView.getBoundLeft())/2+mTetrisSufaceView.getBoundLeft());
 					}
-					Thread.sleep(sleep);
+					Thread.sleep(500);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -121,13 +125,13 @@ public class TetrisMoveRunnable implements Runnable{
 					int cell_top = cellTop+(i-state)*cellSize;
 					int cell_left = cellLeft+j*cellSize;
 					int mapX = (cell_top-boundTop)/cellSize;
-					int mapY = (cellLeft - boundLeft)/cellSize;
+					int mapY = (cell_left - boundLeft)/cellSize;
 					Shape.map[mapX][mapY] = 1;
 					setX.add(mapX);
 				}
 			}
 		}
-		return setX;
+		return setX; 
 	}
 	
 	/**
@@ -158,7 +162,7 @@ public class TetrisMoveRunnable implements Runnable{
 			if(count==mTetrisSufaceView.cols){
 				for (int i = mapX; i >0; i--) {
 					for (int j = 0; j < mTetrisSufaceView.cols; j++) {
-						Shape.map[i][i] =Shape.map[i-1][j];
+						Shape.map[i][j] =Shape.map[i-1][j];
 					}
 				}
 				float valume = mTetrisSufaceView.getVolume();

@@ -1,7 +1,6 @@
 
 package com.example.testels;
 
-import android.util.Log;
 
 /**
  * 项目名称：TestELS
@@ -217,7 +216,7 @@ public class Shape {
 		}else if(action==MOVE){
 			for (int i = state; i < state+4; i++) {
 				for (int j = 0; j < 4; j++) {
-					Log.e("TAG", "isBound-move   type:"+type+"    i:"+i+"      j:"+j);
+//					Log.e("TAG", "isBound-move   type:"+type+"    i:"+i+"      j:"+j);
 					if(Shape.shape[type][i][j]==1){
 						int cell_top = cellTop+(i-state)*cellSize;
 						int cell_left =cellLeft+j*cellSize;
@@ -232,12 +231,12 @@ public class Shape {
 							}
 							break;
 						case RIGHT:
-							if(mapX==TetrisSufaceView.cols-1 || Shape.map[mapX][mapX+1]==1){
+							if(mapX==TetrisSufaceView.cols-1 || Shape.map[mapY][mapX+1]==1){
 								return false;
 							}
 							break;
 						case DOWN:
-							if(mapY==TetrisSufaceView.rows-1 || Shape.map[mapX+1][mapX]==1){
+							if(mapY==TetrisSufaceView.rows-1 || Shape.map[mapY+1][mapX]==1){
 								return false;
 							}
 							break;
