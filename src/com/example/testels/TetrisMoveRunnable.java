@@ -87,7 +87,7 @@ public class TetrisMoveRunnable implements Runnable{
 						Log.i("TAG", "newShape   type:"+mTetrisSufaceView.getType()+"   state:"+mTetrisSufaceView.getState()+"   nextType:"+mTetrisSufaceView.getNextType()+"    nextState:"+mTetrisSufaceView.getNextState());
 						mTetrisSufaceView.setScore(scorePlus+score);
 						mTetrisSufaceView.setCellTop(mTetrisSufaceView.getBoundTop());
-						mTetrisSufaceView.setCellLeft((mTetrisSufaceView.getBoundRight()-mTetrisSufaceView.getBoundLeft())/2+mTetrisSufaceView.getBoundLeft());
+						mTetrisSufaceView.setCellLeft((mTetrisSufaceView.getBoundRight()-mTetrisSufaceView.getBoundLeft())/2+mTetrisSufaceView.getBoundLeft()-mTetrisSufaceView.getCellSize());
 					}
 					Thread.sleep(500);
 				} catch (InterruptedException e) {

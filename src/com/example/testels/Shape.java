@@ -197,7 +197,7 @@ public class Shape {
 				for (int k = 0; k < 4;k++) {
 					if(shape[type][j][k]==1){
 						int cell_top = cellTop+(j-state)*cellSize;
-						int cell_left = cellLeft+k*cellSize;
+						int cell_left = cellLeft+(k-1)*cellSize;
 						
 						int mapX= (cell_left-boundLeft)/cellSize;
 						int mapY =(cell_top-boundTop)/cellSize;

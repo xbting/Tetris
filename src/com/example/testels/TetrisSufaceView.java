@@ -170,7 +170,7 @@ public class TetrisSufaceView extends  SurfaceView implements Callback,Runnable,
 			for (int j = 0; j < 4; j++) {
 //				Log.i("TAG", "drawNextShape---type:"+type+"    state:"+state+"   i:"+i+"    j:"+j);
 				if(Shape.shape[type][i][j]==1){
-					int cellSmallSize = (int) (cellSize*0.6);
+					int cellSmallSize = (int) (cellSize*0.5);
 					int cell_top = boundTop+cellSize*5+cellSmallSize*(i-state);
 					int cell_left = boundRight+10+j*cellSmallSize;
 					Rect cellRect = new Rect(cell_left, cell_top, cell_left+cellSmallSize, cell_top+cellSmallSize);
@@ -234,7 +234,7 @@ public class TetrisSufaceView extends  SurfaceView implements Callback,Runnable,
 					if(isNew){//积木刚从顶部开始
 						if(Shape.map[mapY][mapX] ==1){
 							Log.e("TAG", "getOneBrickShape cell_top:"+cell_top+"   cell_left:"+cell_left);
-							Log.i("TAG", "1111111111111tetrisMoveRunnable is null ?"+(tetrisMoveRunnable==null));
+//							Log.i("TAG", "1111111111111tetrisMoveRunnable is null ?"+(tetrisMoveRunnable==null));
 							isOver = true;
 							break;
 						}
@@ -317,7 +317,7 @@ public class TetrisSufaceView extends  SurfaceView implements Callback,Runnable,
 			duration = endTime -startTime;
 			Log.w("TAG", "duraton:"+duration);
 			try {
-				Thread.sleep(sleep-duration);
+				Thread.sleep(50);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -342,7 +342,7 @@ public class TetrisSufaceView extends  SurfaceView implements Callback,Runnable,
 		boundRight =boundLeft + cellSize*cols;
 		boundBottom = screenHeight-2;
 		boundTop = boundBottom-cellSize*rows;
-		cellLeft =(boundRight-boundLeft)/2+boundLeft-2*cellSize;
+		cellLeft =(boundRight-boundLeft)/2+boundLeft-cellSize;
 		cellTop = boundTop;
 		gameStart();
 	}
