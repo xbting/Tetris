@@ -46,8 +46,8 @@ public class MainActivity extends Activity {
 		case TetrisSufaceView.DIALOG_GAMEOVER:
 			Builder builder = new AlertDialog.Builder(this);
 			builder.setTitle("游戏结束");
-			builder.setMessage("Game is over.again?");
-			builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+			builder.setMessage("游戏已经结束，是否重玩?");
+			builder.setPositiveButton("重玩", new DialogInterface.OnClickListener() {
 				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
@@ -55,7 +55,7 @@ public class MainActivity extends Activity {
 					playGame();
 				}
 			})
-			.setNegativeButton("Exit", new DialogInterface.OnClickListener() {
+			.setNegativeButton("退出", new DialogInterface.OnClickListener() {
 				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
@@ -68,8 +68,8 @@ public class MainActivity extends Activity {
 		case TetrisSufaceView.DIALOG_BACK:
 			builder = new AlertDialog.Builder(this);
 			builder.setTitle("退出游戏");
-			builder.setMessage("Are you sure to exit?");
-			builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+			builder.setMessage("你确定要退出游戏?");
+			builder.setPositiveButton("是", new DialogInterface.OnClickListener() {
 				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
@@ -77,7 +77,7 @@ public class MainActivity extends Activity {
 					System.exit(0);
 				}
 			})
-			.setNegativeButton("No", null);
+			.setNegativeButton("否", null);
 			dialog = builder.create();
 			break;
 		default:

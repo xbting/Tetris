@@ -26,7 +26,7 @@ public class TetrisMoveRunnable implements Runnable{
 	private TetrisSufaceView mTetrisSufaceView;
 	private boolean flag = true;
 	private boolean flagRun = true;
-	private int sleep = 500;
+	private int sleep = 400;
 //	private int[][][] shape = Shape.shape;
 	
 	
@@ -89,7 +89,7 @@ public class TetrisMoveRunnable implements Runnable{
 						mTetrisSufaceView.setCellTop(mTetrisSufaceView.getBoundTop());
 						mTetrisSufaceView.setCellLeft((mTetrisSufaceView.getBoundRight()-mTetrisSufaceView.getBoundLeft())/2+mTetrisSufaceView.getBoundLeft()-mTetrisSufaceView.getCellSize());
 					}
-					Thread.sleep(500);
+					Thread.sleep(sleep);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -121,6 +121,7 @@ public class TetrisMoveRunnable implements Runnable{
 		Set<Integer> setX =new TreeSet<Integer>();
 		for (int i = state; i < state+4; i++) {
 			for (int j = 0; j < 4; j++) {
+				
 				if(Shape.shape[type][i][j]==1){
 					int cell_top = cellTop+(i-state)*cellSize;
 					int cell_left = cellLeft+j*cellSize;
@@ -149,6 +150,7 @@ public class TetrisMoveRunnable implements Runnable{
 	 */
 	private int deleteAndScore(Set<Integer> setX,SoundPool soundPool,Map<String, Integer> soundPoolMap){
 		int scorePlus=0;
+		int countRows = 0;
 		for (Iterator iterator = setX.iterator(); iterator.hasNext();) {
 			int mapX = (Integer) iterator.next();
 			int count = 0;
@@ -167,10 +169,12 @@ public class TetrisMoveRunnable implements Runnable{
 				}
 				float valume = mTetrisSufaceView.getVolume();
 				soundPool.play(soundPoolMap.get("getScore"), valume, valume, 0, 0, 1f);
-				scorePlus++;
+				countRows++;
 			}
 			
 		}
+		Log.e("TAG", "消去的行数："+countRows);
+		scorePlus = 10*(int) Math.pow(2, countRows-1);
 		return scorePlus;
 	}
 

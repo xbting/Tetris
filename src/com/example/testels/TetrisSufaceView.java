@@ -58,13 +58,13 @@ public class TetrisSufaceView extends  SurfaceView implements Callback,Runnable,
 	private Thread surfaceViewDrawThread;
 	private SurfaceHolder surfaceHolder;
 	private Canvas canvas;
-	private Paint paint,paint1,paintBg;
+	private Paint paint,paint1,paintBg,paintCellBg,paintCellFrame;
 	
-	public static int rows=21,cols = 10;  //把屏幕分成21行，10列
+	public static int rows=25,cols = 12;  //把屏幕分成21行，10列
 	
 	private int screenWidth,screenHeight;  //屏幕分辨率
 	private int boundLeft,boundRight,boundTop,boundBottom;  //游戏框四边的坐标
-	private int cellSize;   //一个小方块的单元大小
+	private  int cellSize;   //一个小方块的单元大小
 	private Bitmap red_brick_bmp,green_brick_bmp,yellow_brick_bmp;
 	private NinePatch red_brick_np,green_brick_np,yellow_brick_np;
 	private int cellTop,cellLeft; //下落积木图形的坐标
@@ -108,6 +108,16 @@ public class TetrisSufaceView extends  SurfaceView implements Callback,Runnable,
 		paint1.setAntiAlias(true);
 		paintBg = new Paint();
 		paintBg.setColor(Color.BLACK);
+//		paintBg.setStyle(Paint.Style.STROKE);
+		
+		paintCellBg = new Paint();
+		paintCellBg.setColor(getResources().getColor(R.color.dark_blue));
+		
+		paintCellFrame = new Paint();
+		paintCellFrame.setColor(getResources().getColor(R.color.gray));
+		paintCellFrame.setStyle(Paint.Style.STROKE);
+		paint.setAntiAlias(true);
+		
 		setFocusable(true);
 		setFocusableInTouchMode(true);
 		this.setLongClickable(true);
@@ -141,10 +151,14 @@ public class TetrisSufaceView extends  SurfaceView implements Callback,Runnable,
 		Rect rightRect = new Rect(boundRight, boundTop, boundRight+2, boundBottom);
 		Rect topRect = new Rect(0, boundTop-1, boundRight+2, boundTop);
 		Rect bottomRect = new Rect(0, boundBottom, boundRight+2, boundBottom+2);
+		Rect cellBgRect = new Rect(boundLeft, boundTop, boundRight, boundBottom);
+		
 		canvas.drawRect(leftRect, paint);
 		canvas.drawRect(rightRect, paint);
 		canvas.drawRect(topRect, paint);
 		canvas.drawRect(bottomRect, paint);
+		canvas.drawRect(cellBgRect, paintCellBg);
+		drawBg();
 		drawMap();
 //		Log.e("TAG", "TetrisSurfaceView.doDraw  type:"+type+"   state:"+state);
 		getOneBrickShape(type, state);
@@ -153,6 +167,17 @@ public class TetrisSufaceView extends  SurfaceView implements Callback,Runnable,
 		canvas.drawText("下一个", boundRight+10, boundTop+cellSize*4, paint);
 		drawNextShape(nextType, nextState);
 		surfaceHolder.unlockCanvasAndPost(canvas);
+	}
+	private void drawBg(){
+		
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < cols; j++) {
+				int cell_top = boundTop+i*cellSize;
+				int cell_left = boundLeft+j*cellSize;
+				Rect cellRect = new Rect(cell_left, cell_top, cell_left+cellSize, cell_top+cellSize);
+				canvas.drawRect(cellRect, paintCellFrame);
+			}
+		}
 	}
 	/**
 	 * 在游戏右侧绘制下个图形
@@ -315,7 +340,7 @@ public class TetrisSufaceView extends  SurfaceView implements Callback,Runnable,
 			doDraw();
 			long endTime = System.currentTimeMillis();
 			duration = endTime -startTime;
-			Log.w("TAG", "duraton:"+duration);
+//			Log.w("TAG", "duraton:"+duration);
 			try {
 				Thread.sleep(50);
 			} catch (InterruptedException e) {
@@ -337,6 +362,9 @@ public class TetrisSufaceView extends  SurfaceView implements Callback,Runnable,
 		screenWidth = this.getWidth();
 		screenHeight = this.getHeight();
 		cellSize = screenHeight/rows;
+//		cellSize = (screenHeight-20)/rows;
+		
+		
 		Log.i("TAG", "cellSize:"+cellSize);
 		boundLeft = 2;
 		boundRight =boundLeft + cellSize*cols;
